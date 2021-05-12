@@ -63,6 +63,7 @@ function App() {
       {
         delay,
         interval
+        // openInertialNavigation: true
       },
       res => {
         console.log(res)
