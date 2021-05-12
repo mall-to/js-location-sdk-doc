@@ -1,22 +1,28 @@
 # MallTo Location SDK
-
 墨兔室内定位SDK
 
-## 文档
+- [MallTo Location SDK](#mallto-location-sdk)
+  * [快速上手](#----)
+    + [1. 安装](#1---)
+    + [2. 初始化](#2----)
+    + [3. 开启定位](#3-----)
+    + [4. 停止定位](#4-----)
+  * [示例代码](#----)
+  * [点位更新平滑移动方案](#----------)
+  * [详细定位API](#----api)
+    + [定位监听](#----)
+    + [停止定位](#----)
 
-文档参见docs目录
 
-示例参见example目录
+## 快速上手
 
-[点位更新平滑移动方案](./smoothPosition.md)
+### 1. 引入依赖库
 
+> 请先在项目中引入SDK对应的模式的代码(在dist目录中)，下面的例子统一放在`src/lib`文件夹中
 
+### 2. 初始化
 
-## 安装
-
-> 请先在项目中引入SDK对应的模式的代码，下面的例子统一放在`src/lib`文件夹中
-
-### Es Module
+> 需要在项目入口或者对应的页面引用，并且初始化sdk
 
 ```typescript
 import MallToLocation from './lib/dist/mall-to-location-sdk-es'
@@ -24,29 +30,63 @@ const mallToLocation = new MallToLocation({
     appId: '999',
     appSecret: 'testsecret',
     uuid: '1008'
-    // inertialNavigationOptions: {
-    //   openWorker: false // 是否启用webWorker，默认启用
-    // }
 })
 ```
 
+### 3. 开启定位
 
-## 使用方法
+```typescript
+    mallToLocation.onPosition({
+        // ⚠️ 这里可以用openid、user_id、mac、等有效唯一标识
+        openid: 1 //or mac:xxxxx
+    }, {
+        openInertialNavigation: false, // 开启惯性导航 默认关闭,关闭时每秒返回一次定位结果,开启后100ms返回一次定位结果
+    }, res => {
+        console.log(res)
+        if (res.success) {
+            console.log('位置信息: \t', res.data.position)
+        } else {
+            console.log('位置信息获取失败: \t', res.data.msg)
+        }
+    })
+```
 
-### 开启导航
+### 4. 停止定位
+
+### 5. 更好的渲染点位到地图上
+因为两次定位结果返回有时间间隔,所以可以在渲染点位的时候加入位移动画,从而有更好的显示效果.
+[详见点位更新平滑移动方案](./smoothPosition.md)
+
+
+```typescript
+    mallToLocation.stopPosition()
+```
+
+## 示例代码
+[详见](https://github.com/mall-to/js-location-sdk-doc/tree/master/example)
+
+
+
+
+## 详细定位API
+
+### 定位监听
 
 ```typescript
 mallToLocation.onPosition(
     {
-        // ⚠️ 这里可以用open、userId、macId、等有效唯一标识
-        openid: '1',
+        // ⚠️ 这里可以用openid、user_id、mac、等有效唯一标识
+        openid: 1 //or mac:xxxxx
         // userId: '1',
         // macId: '1',
         // [key: string]: string 传入一种唯一标识即可
     },
     {
-      delay,
-      interval
+        delay: 0, // 延迟n秒后开始获取位置, 默认0
+        interval: 1000, // 每隔n秒获取一次位置, 默认1000
+        delayStopTime: 10 * 1000, // 位置停止移动延迟停止位置更新时间 默认10秒
+        stopWalkingRefreshRange: 2, // 人物停止移动后位置更新的边界 默认2米
+        openInertialNavigation: false // 开启惯性导航 默认关闭,关闭时每秒返回一次定位结果,开启后100ms返回一次定位结果
     },
     res => {
       console.log(res)
@@ -60,57 +100,11 @@ mallToLocation.onPosition(
 
 ```
 
-### 关闭导航
+### 停止定位
 
 ```typescript
 mallToLocation.stopPosition()
 ```
 
-### 开启惯性导航的动作和方向授权
+[更多API文档](https://mall-to.github.io/js-location-sdk-doc/classes/_index_.location.html#onposition)
 
-> ⚠️请确保当前的域名是在HTTPS下的，并且非Chrome的手机浏览器, 推荐用Firefox Mobile
-
-```typescript
-const result = await mallToLocation.startInertialNavigation()
-if (result.success) {
-    console.log('惯性导航授权打开成功')
-} else {
-    console.log('惯性导航授权打开失败: \t', result.msg)
-}
-```
-
-### 在位置监听服务中，开启惯导辅助
-
-> 请确保打开惯导辅助前，已经打开了位置监听服务
-
-```typescript
-mallToLocation.onInertialNavigation((type, data) => {
-    if (type === 'error') {
-        console.log('触发错误')
-    }
-    if (type === 'motion') {
-        console.log('触发惯导更新位置，返回位置')
-    } else if (type === 'orientation') {
-        console.log('触发方向更新，返回角度')
-    }
-})
-```
-
-### 手动设定经纬度，开启惯导辅助
-
-> ⚠️ 请确保惯导计算位置更新前，已经设定好了最新的位置，不然可能有偏差
-
-```typescript
-// 手动传入位置
-mallToLocation.setPosition(defaultPosition)
-mallToLocation.onInertialNavigation((type, data) => {
-    if (type === 'error') {
-        console.log('触发错误')
-    }
-    if (type === 'motion') {
-        console.log('触发惯导更新位置，返回位置')
-    } else if (type === 'orientation') {
-        console.log('触发方向更新，返回角度')
-    }
-})
-```

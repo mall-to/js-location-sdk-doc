@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>mall-to-location-sdk - v1.0.0</title>
+	<title>mall-to-location-sdk - v1.1.2</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">mall-to-location-sdk - v1.0.0</a>
+					<a href="index.html" class="title">mall-to-location-sdk - v1.1.2</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -80,47 +80,95 @@
 					<h1>MallTo Location SDK</h1>
 				</a>
 				<p>墨兔室内定位SDK</p>
-				<a href="#文档" id="文档" style="color: inherit; text-decoration: none;">
-					<h2>文档</h2>
+				<ul>
+					<li><a href="#mallto-location-sdk">MallTo Location SDK</a><ul>
+							<li><a href="#----">快速上手</a><ul>
+									<li><a href="#1---">1. 安装</a></li>
+									<li><a href="#2----">2. 初始化</a></li>
+									<li><a href="#3-----">3. 开启定位</a></li>
+									<li><a href="#4-----">4. 停止定位</a></li>
+								</ul>
+							</li>
+							<li><a href="#----">示例代码</a></li>
+							<li><a href="#----------">点位更新平滑移动方案</a></li>
+							<li><a href="#----api">详细定位API</a><ul>
+									<li><a href="#----">定位监听</a></li>
+									<li><a href="#----">停止定位</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#快速上手" id="快速上手" style="color: inherit; text-decoration: none;">
+					<h2>快速上手</h2>
 				</a>
-				<p>文档参见docs目录</p>
-				<p>示例参见example目录</p>
-				<p><a href="./smoothPosition.md">点位更新平滑移动方案</a></p>
-				<a href="#安装" id="安装" style="color: inherit; text-decoration: none;">
-					<h2>安装</h2>
+				<a href="#1-引入依赖库" id="1-引入依赖库" style="color: inherit; text-decoration: none;">
+					<h3>1. 引入依赖库</h3>
 				</a>
 				<blockquote>
-					<p>请先在项目中引入SDK对应的模式的代码，下面的例子统一放在<code>src/lib</code>文件夹中</p>
+					<p>请先在项目中引入SDK对应的模式的代码(在dist目录中)，下面的例子统一放在<code>src/lib</code>文件夹中</p>
 				</blockquote>
-				<a href="#es-module" id="es-module" style="color: inherit; text-decoration: none;">
-					<h3>Es Module</h3>
+				<a href="#2-初始化" id="2-初始化" style="color: inherit; text-decoration: none;">
+					<h3>2. 初始化</h3>
 				</a>
+				<blockquote>
+					<p>需要在项目入口或者对应的页面引用，并且初始化sdk</p>
+				</blockquote>
 				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> MallToLocation <span class="hljs-keyword">from</span> <span class="hljs-string">'./lib/dist/mall-to-location-sdk-es'</span>
 <span class="hljs-keyword">const</span> mallToLocation = <span class="hljs-keyword">new</span> MallToLocation({
     appId: <span class="hljs-string">'999'</span>,
     appSecret: <span class="hljs-string">'testsecret'</span>,
     uuid: <span class="hljs-string">'1008'</span>
-    <span class="hljs-comment">// inertialNavigationOptions: {</span>
-    <span class="hljs-comment">//   openWorker: false // 是否启用webWorker，默认启用</span>
-    <span class="hljs-comment">// }</span>
 })</code></pre>
-				<a href="#使用方法" id="使用方法" style="color: inherit; text-decoration: none;">
-					<h2>使用方法</h2>
+				<a href="#3-开启定位" id="3-开启定位" style="color: inherit; text-decoration: none;">
+					<h3>3. 开启定位</h3>
 				</a>
-				<a href="#开启导航" id="开启导航" style="color: inherit; text-decoration: none;">
-					<h3>开启导航</h3>
+				<pre><code class="language-typescript">    mallToLocation.onPosition({
+        <span class="hljs-comment">// ⚠️ 这里可以用openid、user_id、mac、等有效唯一标识</span>
+        openid: <span class="hljs-number">1</span> <span class="hljs-comment">//or mac:xxxxx</span>
+    }, {
+        openInertialNavigation: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 开启惯性导航 默认关闭,关闭时每秒返回一次定位结果,开启后100ms返回一次定位结果</span>
+    }, <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(res)
+        <span class="hljs-keyword">if</span> (res.success) {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'位置信息: \t'</span>, res.data.position)
+        } <span class="hljs-keyword">else</span> {
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'位置信息获取失败: \t'</span>, res.data.msg)
+        }
+    })</code></pre>
+				<a href="#4-停止定位" id="4-停止定位" style="color: inherit; text-decoration: none;">
+					<h3>4. 停止定位</h3>
+				</a>
+				<a href="#5-更好的渲染点位到地图上" id="5-更好的渲染点位到地图上" style="color: inherit; text-decoration: none;">
+					<h3>5. 更好的渲染点位到地图上</h3>
+				</a>
+				<p>因为两次定位结果返回有时间间隔,所以可以在渲染点位的时候加入位移动画,从而有更好的显示效果.
+				<a href="./smoothPosition.md">详见点位更新平滑移动方案</a></p>
+				<pre><code class="language-typescript">    mallToLocation.stopPosition()</code></pre>
+				<a href="#示例代码" id="示例代码" style="color: inherit; text-decoration: none;">
+					<h2>示例代码</h2>
+				</a>
+				<p><a href="https://github.com/mall-to/js-location-sdk-doc/tree/master/example">详见</a></p>
+				<a href="#详细定位api" id="详细定位api" style="color: inherit; text-decoration: none;">
+					<h2>详细定位API</h2>
+				</a>
+				<a href="#定位监听" id="定位监听" style="color: inherit; text-decoration: none;">
+					<h3>定位监听</h3>
 				</a>
 				<pre><code class="language-typescript">mallToLocation.onPosition(
     {
-        <span class="hljs-comment">// ⚠️ 这里可以用open、userId、macId、等有效唯一标识</span>
-        openid: <span class="hljs-string">'1'</span>,
+        <span class="hljs-comment">// ⚠️ 这里可以用openid、user_id、mac、等有效唯一标识</span>
+        openid: <span class="hljs-number">1</span> <span class="hljs-comment">//or mac:xxxxx</span>
         <span class="hljs-comment">// userId: '1',</span>
         <span class="hljs-comment">// macId: '1',</span>
         <span class="hljs-comment">// [key: string]: string 传入一种唯一标识即可</span>
     },
     {
-      delay,
-      interval
+        delay: <span class="hljs-number">0</span>, <span class="hljs-comment">// 延迟n秒后开始获取位置, 默认0</span>
+        interval: <span class="hljs-number">1000</span>, <span class="hljs-comment">// 每隔n秒获取一次位置, 默认1000</span>
+        delayStopTime: <span class="hljs-number">10</span> * <span class="hljs-number">1000</span>, <span class="hljs-comment">// 位置停止移动延迟停止位置更新时间 默认10秒</span>
+        stopWalkingRefreshRange: <span class="hljs-number">2</span>, <span class="hljs-comment">// 人物停止移动后位置更新的边界 默认2米</span>
+        openInertialNavigation: <span class="hljs-literal">false</span> <span class="hljs-comment">// 开启惯性导航 默认关闭,关闭时每秒返回一次定位结果,开启后100ms返回一次定位结果</span>
     },
     <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
       <span class="hljs-built_in">console</span>.log(res)
@@ -132,56 +180,11 @@
     }
 )
 </code></pre>
-				<a href="#关闭导航" id="关闭导航" style="color: inherit; text-decoration: none;">
-					<h3>关闭导航</h3>
+				<a href="#停止定位" id="停止定位" style="color: inherit; text-decoration: none;">
+					<h3>停止定位</h3>
 				</a>
 				<pre><code class="language-typescript">mallToLocation.stopPosition()</code></pre>
-				<a href="#开启惯性导航的动作和方向授权" id="开启惯性导航的动作和方向授权" style="color: inherit; text-decoration: none;">
-					<h3>开启惯性导航的动作和方向授权</h3>
-				</a>
-				<blockquote>
-					<p>⚠️请确保当前的域名是在HTTPS下的，并且非Chrome的手机浏览器, 推荐用Firefox Mobile</p>
-				</blockquote>
-				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> mallToLocation.startInertialNavigation()
-<span class="hljs-keyword">if</span> (result.success) {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'惯性导航授权打开成功'</span>)
-} <span class="hljs-keyword">else</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'惯性导航授权打开失败: \t'</span>, result.msg)
-}</code></pre>
-				<a href="#在位置监听服务中，开启惯导辅助" id="在位置监听服务中，开启惯导辅助" style="color: inherit; text-decoration: none;">
-					<h3>在位置监听服务中，开启惯导辅助</h3>
-				</a>
-				<blockquote>
-					<p>请确保打开惯导辅助前，已经打开了位置监听服务</p>
-				</blockquote>
-				<pre><code class="language-typescript">mallToLocation.onInertialNavigation(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">type</span>, data</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'error'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发错误'</span>)
-    }
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'motion'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发惯导更新位置，返回位置'</span>)
-    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'orientation'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发方向更新，返回角度'</span>)
-    }
-})</code></pre>
-				<a href="#手动设定经纬度，开启惯导辅助" id="手动设定经纬度，开启惯导辅助" style="color: inherit; text-decoration: none;">
-					<h3>手动设定经纬度，开启惯导辅助</h3>
-				</a>
-				<blockquote>
-					<p>⚠️ 请确保惯导计算位置更新前，已经设定好了最新的位置，不然可能有偏差</p>
-				</blockquote>
-				<pre><code class="language-typescript"><span class="hljs-comment">// 手动传入位置</span>
-mallToLocation.setPosition(defaultPosition)
-mallToLocation.onInertialNavigation(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">type</span>, data</span>) =&gt;</span> {
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'error'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发错误'</span>)
-    }
-    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'motion'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发惯导更新位置，返回位置'</span>)
-    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'orientation'</span>) {
-        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发方向更新，返回角度'</span>)
-    }
-})</code></pre>
+				<p><a href="https://mall-to.github.io/js-location-sdk-doc/classes/_index_.location.html#onposition">更多API文档</a></p>
 			</div>
 			<footer class="with-border-bottom">
 				<div class="tsd-legend-group">
