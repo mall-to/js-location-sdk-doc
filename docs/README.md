@@ -38,13 +38,12 @@ const mallToLocation = new MallToLocation({
     })
 ```
 
-### 停止定位
 
 ### 更好的渲染点位到地图上
 因为两次定位结果返回有时间间隔,所以可以在渲染点位的时候加入位移动画,从而有更好的显示效果.
 [详见点位更新平滑移动方案](./smoothPosition.md)
 
-
+### 停止定位
 ```typescript
     mallToLocation.stopPosition()
 ```
