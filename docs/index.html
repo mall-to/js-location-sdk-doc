@@ -1,0 +1,224 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>mall-to-location-sdk - v1.0.0</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">mall-to-location-sdk - v1.0.0</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</header>
+<div class="container">
+	<div class="row container container-main">
+		<div class="col-3 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul>
+					<li>📑 Index</li>
+					<li><br></li>
+					<li class=" ">
+						<a href="globals.html">Globals</a>
+						</li>                        <li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+				</li>                </ul>
+			</nav>
+		</div>
+		<div class="col-9 col-content">
+			<div class="tsd-panel">
+				<a href="#mallto-location-sdk" id="mallto-location-sdk" style="color: inherit; text-decoration: none;">
+					<h1>MallTo Location SDK</h1>
+				</a>
+				<p>墨兔室内定位SDK</p>
+				<a href="#文档" id="文档" style="color: inherit; text-decoration: none;">
+					<h2>文档</h2>
+				</a>
+				<p>文档参见docs目录</p>
+				<p>示例参见example目录</p>
+				<p><a href="./smoothPosition.md">点位更新平滑移动方案</a></p>
+				<a href="#安装" id="安装" style="color: inherit; text-decoration: none;">
+					<h2>安装</h2>
+				</a>
+				<blockquote>
+					<p>请先在项目中引入SDK对应的模式的代码，下面的例子统一放在<code>src/lib</code>文件夹中</p>
+				</blockquote>
+				<a href="#es-module" id="es-module" style="color: inherit; text-decoration: none;">
+					<h3>Es Module</h3>
+				</a>
+				<pre><code class="language-typescript"><span class="hljs-keyword">import</span> MallToLocation <span class="hljs-keyword">from</span> <span class="hljs-string">'./lib/dist/mall-to-location-sdk-es'</span>
+<span class="hljs-keyword">const</span> mallToLocation = <span class="hljs-keyword">new</span> MallToLocation({
+    appId: <span class="hljs-string">'999'</span>,
+    appSecret: <span class="hljs-string">'testsecret'</span>,
+    uuid: <span class="hljs-string">'1008'</span>
+    <span class="hljs-comment">// inertialNavigationOptions: {</span>
+    <span class="hljs-comment">//   openWorker: false // 是否启用webWorker，默认启用</span>
+    <span class="hljs-comment">// }</span>
+})</code></pre>
+				<a href="#使用方法" id="使用方法" style="color: inherit; text-decoration: none;">
+					<h2>使用方法</h2>
+				</a>
+				<a href="#开启导航" id="开启导航" style="color: inherit; text-decoration: none;">
+					<h3>开启导航</h3>
+				</a>
+				<pre><code class="language-typescript">mallToLocation.onPosition(
+    {
+        <span class="hljs-comment">// ⚠️ 这里可以用open、userId、macId、等有效唯一标识</span>
+        openid: <span class="hljs-string">'1'</span>,
+        <span class="hljs-comment">// userId: '1',</span>
+        <span class="hljs-comment">// macId: '1',</span>
+        <span class="hljs-comment">// [key: string]: string 传入一种唯一标识即可</span>
+    },
+    {
+      delay,
+      interval
+    },
+    <span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(res)
+      <span class="hljs-keyword">if</span> (res.success) {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'位置信息: \t'</span>, res.data.position)
+      } <span class="hljs-keyword">else</span> {
+          <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'位置信息获取失败: \t'</span>, res.data.msg)
+      }
+    }
+)
+</code></pre>
+				<a href="#关闭导航" id="关闭导航" style="color: inherit; text-decoration: none;">
+					<h3>关闭导航</h3>
+				</a>
+				<pre><code class="language-typescript">mallToLocation.stopPosition()</code></pre>
+				<a href="#开启惯性导航的动作和方向授权" id="开启惯性导航的动作和方向授权" style="color: inherit; text-decoration: none;">
+					<h3>开启惯性导航的动作和方向授权</h3>
+				</a>
+				<blockquote>
+					<p>⚠️请确保当前的域名是在HTTPS下的，并且非Chrome的手机浏览器, 推荐用Firefox Mobile</p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-keyword">const</span> result = <span class="hljs-keyword">await</span> mallToLocation.startInertialNavigation()
+<span class="hljs-keyword">if</span> (result.success) {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'惯性导航授权打开成功'</span>)
+} <span class="hljs-keyword">else</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'惯性导航授权打开失败: \t'</span>, result.msg)
+}</code></pre>
+				<a href="#在位置监听服务中，开启惯导辅助" id="在位置监听服务中，开启惯导辅助" style="color: inherit; text-decoration: none;">
+					<h3>在位置监听服务中，开启惯导辅助</h3>
+				</a>
+				<blockquote>
+					<p>请确保打开惯导辅助前，已经打开了位置监听服务</p>
+				</blockquote>
+				<pre><code class="language-typescript">mallToLocation.onInertialNavigation(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">type</span>, data</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'error'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发错误'</span>)
+    }
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'motion'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发惯导更新位置，返回位置'</span>)
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'orientation'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发方向更新，返回角度'</span>)
+    }
+})</code></pre>
+				<a href="#手动设定经纬度，开启惯导辅助" id="手动设定经纬度，开启惯导辅助" style="color: inherit; text-decoration: none;">
+					<h3>手动设定经纬度，开启惯导辅助</h3>
+				</a>
+				<blockquote>
+					<p>⚠️ 请确保惯导计算位置更新前，已经设定好了最新的位置，不然可能有偏差</p>
+				</blockquote>
+				<pre><code class="language-typescript"><span class="hljs-comment">// 手动传入位置</span>
+mallToLocation.setPosition(defaultPosition)
+mallToLocation.onInertialNavigation(<span class="hljs-function">(<span class="hljs-params"><span class="hljs-keyword">type</span>, data</span>) =&gt;</span> {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'error'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发错误'</span>)
+    }
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'motion'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发惯导更新位置，返回位置'</span>)
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">type</span> === <span class="hljs-string">'orientation'</span>) {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'触发方向更新，返回角度'</span>)
+    }
+})</code></pre>
+			</div>
+			<footer class="with-border-bottom">
+				<div class="tsd-legend-group">
+					<ul class="tsd-legend">
+						<li class="tsd-is-inherited"><span class="tsd-kind-icon">Inherited</span></li>
+						<li class="tsd-is-protected"><span class="tsd-kind-icon">Protected</span></li>
+						<li class="tsd-is-private"><span class="tsd-kind-icon">Private</span></li>
+						<li class="tsd-is-static"><span class="tsd-kind-icon">Static</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+						<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object</span></li>
+						<li class="tsd-kind-property"><span class="tsd-kind-icon">Property</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+						<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+						<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type</span></li>
+						<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+						<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+					</ul>
+					<ul class="tsd-legend">
+						<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enum</span></li>
+						<li class="tsd-kind-constructor"><span class="tsd-kind-icon">Constructor</span></li>
+						<li class="tsd-kind-accessor"><span class="tsd-kind-icon">Getter/Setter</span></li>
+					</ul>
+				</div>
+			</footer>
+			<div>Made with ❤️ by <a href="https://github.com/pirix-gh/eledoc" target="_blank">pirix-gh</a>. Documentation generated by <a href="http://typedoc.org/" target="_blank">TypeDoc.</a></div>
+		</div>
+	</div>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+/dist/*
+!dist/mall-to-location-sdk-es.js
